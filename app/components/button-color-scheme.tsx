@@ -11,20 +11,21 @@ import {
   Menu,
   MenuButton,
   MenuItem,
-  useColorScheme,
 } from "@mui/joy";
+import { useColorScheme as useJoyColorScheme } from "@mui/joy/styles";
+import { useColorScheme as useMaterialColorScheme } from "@mui/material/styles";
 import { memo } from "react";
 
 export function ColorSchemeButton(props: ColorSchemeButtonProps): JSX.Element {
-  const { mode, systemMode } = useColorScheme();
+  const { mode, systemMode } = useJoyColorScheme();
 
   return (
     <Dropdown>
       <MenuButton slots={{ root: IconButton }} slotProps={{ root: props }}>
         {mode === "light" || (mode === "system" && systemMode === "light") ? (
-          <DarkModeRounded />
-        ) : (
           <LightModeRounded />
+        ) : (
+          <DarkModeRounded />
         )}
       </MenuButton>
 
@@ -40,18 +41,20 @@ export function ColorSchemeButton(props: ColorSchemeButtonProps): JSX.Element {
 const ModeMenuItem = memo(function ModeMenuItem({
   mode,
 }: ModeMenuItemProps): JSX.Element {
-  const scheme = useColorScheme();
+  const schemeJoy = useJoyColorScheme();
+  const schemeMaterial = useMaterialColorScheme();
 
   return (
     <MenuItem
       onClick={() => {
-        scheme.setMode(mode);
+        schemeJoy.setMode(mode);
+        schemeMaterial.setMode(mode);
       }}
-      selected={scheme.mode === mode}
+      selected={schemeJoy.mode === mode}
     >
       <ListItemDecorator sx={{ ml: 0.5 }}>
         {mode === "light" ||
-        (mode !== "dark" && scheme.systemMode === "light") ? (
+        (mode !== "dark" && schemeJoy.systemMode === "light") ? (
           <LightModeRounded />
         ) : (
           <DarkModeRounded />

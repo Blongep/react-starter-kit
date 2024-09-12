@@ -1,7 +1,7 @@
 /* SPDX-FileCopyrightText: 2014-present Kriasoft */
 /* SPDX-License-Identifier: MIT */
 
-import { BrightnessAutoRounded } from "@mui/icons-material";
+import { SkipNext } from "@mui/icons-material";
 import { Box, BoxProps, IconButton, Typography } from "@mui/joy";
 import { Link } from "react-router-dom";
 
@@ -21,7 +21,7 @@ export function Logo(props: LogoProps): JSX.Element {
       {...other}
     >
       <IconButton component={Link} to="/" color="primary" variant="soft">
-        <BrightnessAutoRounded />
+        <SkipNext />
       </IconButton>
       <Typography sx={{ fontSize: "1.25rem" }} level="h4" component="div">
         {import.meta.env.VITE_APP_NAME}
