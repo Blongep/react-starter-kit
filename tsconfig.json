@@ -4,7 +4,6 @@
     { "path": "./app" },
     { "path": "./db" },
     { "path": "./edge" },
-    { "path": "./scripts" },
-    { "path": "./server" }
+    { "path": "./scripts" }
   ]
 }

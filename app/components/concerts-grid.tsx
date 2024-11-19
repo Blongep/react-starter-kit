@@ -19,7 +19,7 @@ export function ConcertGrid(concertsProps: ConcertGridProps): JSX.Element {
               <Typography>{concert.organizer}</Typography>
             </td>
             <td>
-              <Typography>{concert.venue}</Typography>
+              <Typography>{concert.venueName}</Typography>
             </td>
             <td>
               <Typography>

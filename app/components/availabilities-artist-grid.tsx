@@ -2,11 +2,12 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { Box, IconButton, Table, Typography } from "@mui/joy";
 import dayjs from "dayjs";
-import { rejectOption, validateOption } from "../services/artist-service";
+//import { rejectOption, validateOption } from "../services/artist-service";
+import { cancelOption, validateOption } from "../services/artist-service";
 import { Availability } from "../types/availability";
 import { Option } from "../types/option";
 
-export function AvailabilityGrid(
+export function AvailabilityArtistGrid(
   availabilitiesProps: AvailabilityGridProps,
 ): JSX.Element {
   return (
@@ -44,7 +45,7 @@ export function AvailabilityGrid(
                       <Typography>{option.organizer}</Typography>
                     </td>
                     <td>
-                      <Typography>{option.venue}</Typography>
+                      <Typography>{option.venueName}</Typography>
                     </td>
                     <td>
                       <Typography>
@@ -55,8 +56,9 @@ export function AvailabilityGrid(
                       <IconButton
                         sx={{ mb: 1 }}
                         variant="plain"
-                        onClick={() => {
-                          validateOption(option.id);
+                        onClick={async () => {
+                          await validateOption(option);
+                          availabilitiesProps.updateState();
                         }}
                       >
                         <CheckCircleOutlineIcon />
@@ -66,8 +68,9 @@ export function AvailabilityGrid(
                       <IconButton
                         sx={{ mb: 1 }}
                         variant="plain"
-                        onClick={() => {
-                          rejectOption(option.id);
+                        onClick={async () => {
+                          await cancelOption(option.id);
+                          availabilitiesProps.updateState();
                         }}
                       >
                         <CancelIcon />
@@ -86,4 +89,5 @@ export function AvailabilityGrid(
 
 export type AvailabilityGridProps = {
   availabilities: Availability[];
+  updateState: () => void;
 };

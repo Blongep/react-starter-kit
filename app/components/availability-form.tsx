@@ -3,6 +3,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { Dayjs } from "dayjs";
+import "dayjs/locale/fr";
 import { useState } from "react";
 import { addAvailability } from "../services/artist-service";
 import { Availability } from "../types/availability";
@@ -15,27 +16,26 @@ export function AvailabilityForm(
   const [region, setRegion] = useState<string>("");
 
   return (
-    <form
-      onSubmit={(event) => {
-        event.preventDefault();
-        const newAvailability: Availability = {
-          id: Math.random() * 1000,
-          artistShortName: availabilitiesFormProps.artistShortName,
-          startDate: startDate as Dayjs,
-          endDate: endDate as Dayjs,
-          region: region as string,
-          options: [],
-        };
-        addAvailability(
-          newAvailability,
-          availabilitiesFormProps.artistShortName,
-        );
-        setRegion("");
-        setStartDate(null);
-        setEndDate(null);
-      }}
-    >
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fr">
+      <form
+        onSubmit={async (event) => {
+          event.preventDefault();
+          const newAvailability: Availability = {
+            id: "",
+            artistId: availabilitiesFormProps.artistId,
+            artistName: "",
+            startDate: startDate as Dayjs,
+            endDate: endDate as Dayjs,
+            region: region as string,
+            options: [],
+          };
+          await addAvailability(newAvailability);
+          availabilitiesFormProps.updateState();
+          setRegion("");
+          setStartDate(null);
+          setEndDate(null);
+        }}
+      >
         <Stack spacing={2}>
           <FormControl required>
             <DatePicker
@@ -66,11 +66,12 @@ export function AvailabilityForm(
             Créer une dispo
           </Button>
         </Stack>
-      </LocalizationProvider>
-    </form>
+      </form>
+    </LocalizationProvider>
   );
 }
 
 export type AvailabilitiesFormProps = {
-  artistShortName: string;
+  artistId: string;
+  updateState: () => void;
 };

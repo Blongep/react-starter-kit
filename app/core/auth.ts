@@ -13,7 +13,7 @@ import { atom, useAtomValue } from "jotai";
 import { loadable } from "jotai/utils";
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { app, auth } from "./firebase";
+import { app, auth } from "./firebaseInit";
 import { store } from "./store";
 
 export const currentUser = atom<Promise<User | null> | User | null>(

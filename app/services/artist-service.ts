@@ -1,285 +1,275 @@
-import dayjs from "dayjs";
 import { Artist } from "../types/artist";
+
+import { getApp } from "firebase/app";
+import {
+  Timestamp,
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+  query,
+  where,
+} from "firebase/firestore";
+
+import dayjs from "dayjs";
+import { app } from "../core/firebaseInit";
 import { Availability } from "../types/availability";
 import { Concert } from "../types/concert";
+import { Option } from "../types/option";
+import { Venue } from "../types/venue";
+const db = getFirestore(app ? app : getApp());
 
-const artists: Artist[] = [
-  {
-    id: 0,
-    shortName: "malkavian",
-    longName: "Malkavian",
-    description: "Black/Death",
-    image: "placeholder",
-    availabilities: [
-      {
-        id: 0,
-        artistShortName: "malkavian",
-        region: "Poitou-Charentes",
-        startDate: dayjs("2025-01-01"),
-        endDate: dayjs("2025-01-31"),
-        options: [],
-      },
-      {
-        id: 1,
-        artistShortName: "malkavian",
-        region: "Creuse",
-        startDate: dayjs("2025-02-01"),
-        endDate: dayjs("2025-02-28"),
-        options: [
-          {
-            id: 0,
-            organizer: "Crumble Fight",
-            venue: "Cold Crash",
-            date: dayjs("2025-02-15T20:00:00"),
-          },
-        ],
-      },
-    ],
-    concerts: [
-      {
-        id: 0,
-        date: dayjs("2025-03-01T20:00:00"),
-        organizer: "Live Nation",
-        venue: "Le Trianon",
-      },
-      {
-        id: 1,
-        date: dayjs("2025-04-01T21:00:00"),
-        organizer: "AEG Presents",
-        venue: "Le Transbordeur",
-      },
-    ],
-  },
-  {
-    id: 1,
-    shortName: "gojira",
-    longName: "Gojira",
-    description: "Prog",
-    image: "placeholder",
-    availabilities: [
-      {
-        id: 2,
-        artistShortName: "gojira",
-        region: "Poitou-Charentes",
-        startDate: dayjs("2025-01-01"),
-        endDate: dayjs("2025-01-31"),
-        options: [],
-      },
-      {
-        id: 3,
-        artistShortName: "gojira",
-        region: "Creuse",
-        startDate: dayjs("2025-02-01"),
-        endDate: dayjs("2025-02-28"),
-        options: [],
-      },
-    ],
-    concerts: [
-      {
-        id: 2,
-        date: dayjs("2025-03-01T20:00:00"),
-        organizer: "Live Nation",
-        venue: "Le Trianon",
-      },
-      {
-        id: 3,
-        date: dayjs("2025-04-01T21:00:00"),
-        organizer: "AEG Presents",
-        venue: "Le Transbordeur",
-      },
-    ],
-  },
-  {
-    id: 2,
-    shortName: "sierra",
-    longName: "Sierra",
-    description: "EBM",
-    image: "placeholder",
-    availabilities: [
-      {
-        id: 4,
-        artistShortName: "sierra",
-        region: "Poitou-Charentes",
-        startDate: dayjs("2025-01-01"),
-        endDate: dayjs("2025-01-31"),
-        options: [],
-      },
-      {
-        id: 5,
-        artistShortName: "sierra",
-        region: "Creuse",
-        startDate: dayjs("2025-02-01"),
-        endDate: dayjs("2025-02-28"),
-        options: [],
-      },
-    ],
-    concerts: [
-      {
-        id: 4,
-        date: dayjs("2025-03-01T20:00:00"),
-        organizer: "Live Nation",
-        venue: "Le Trianon",
-      },
-      {
-        id: 5,
-        date: dayjs("2025-04-01T21:00:00"),
-        organizer: "AEG Presents",
-        venue: "Le Transbordeur",
-      },
-    ],
-  },
-  {
-    id: 3,
-    shortName: "codeorange",
-    longName: "Code Orange",
-    description: "Metalcore",
-    image: "placeholder",
-    availabilities: [
-      {
-        id: 6,
-        artistShortName: "codeorange",
-        region: "Poitou-Charentes",
-        startDate: dayjs("2025-01-01"),
-        endDate: dayjs("2025-01-31"),
-        options: [],
-      },
-      {
-        id: 7,
-        artistShortName: "codeorange",
-        region: "Creuse",
-        startDate: dayjs("2025-02-01"),
-        endDate: dayjs("2025-02-28"),
-        options: [],
-      },
-    ],
-    concerts: [
-      {
-        id: 6,
-        date: dayjs("2025-03-01T20:00:00"),
-        organizer: "Live Nation",
-        venue: "Le Trianon",
-      },
-      {
-        id: 7,
-        date: dayjs("2025-04-01T21:00:00"),
-        organizer: "AEG Presents",
-        venue: "Le Transbordeur",
-      },
-    ],
-  },
-];
-
-export const fetchArtists = (): Artist[] => {
-  const data = localStorage.getItem("artists");
-  if (data === null) {
-    localStorage.setItem("artists", JSON.stringify(artists));
-    return artists;
-  }
-  const parsedData = JSON.parse(data);
-  return parsedData || [];
+const convertFirestoreDateToDayjs = (firestoreDate: Timestamp): dayjs.Dayjs => {
+  return dayjs(firestoreDate.toDate());
 };
 
-export const fetchArtist = (shortArtistName: string): Artist => {
-  const artistFound = fetchArtists().find(
-    (artist) => artist.shortName === shortArtistName,
+export const fetchSimpleAvailability = async (
+  availabilityId: string,
+): Promise<Availability> => {
+  const availabilityDoc = await getDoc(
+    doc(db, "availabilities", availabilityId),
   );
-  if (artistFound === undefined) {
-    throw new Response("Not Found", { status: 404 });
+  const data = availabilityDoc.data();
+  if (data) {
+    return {
+      id: availabilityId,
+      artistId: data.artistId,
+      artistName: "",
+      region: data.region,
+      startDate: convertFirestoreDateToDayjs(data.startDate),
+      endDate: convertFirestoreDateToDayjs(data.endDate),
+      options: [],
+    } as unknown as Availability;
   }
-  return artistFound;
+  return {} as unknown as Availability;
 };
 
-export const addAvailability = (
+export const fetchAvailabilities = async (): Promise<Availability[]> => {
+  const querySnapshot = await getDocs(collection(db, "availabilities"));
+  const availabilities = await Promise.all(
+    querySnapshot.docs.map(async (availability) => {
+      const data = availability.data();
+      const options: Option[] = await fetchOptionsFromAvailabilityId(
+        availability.id,
+      );
+      const artist = await fetchSimpleArtist(data.artistId);
+
+      return {
+        id: availability.id,
+        artistId: data.artistId,
+        artistName: artist.longName,
+        region: data.region,
+        startDate: convertFirestoreDateToDayjs(data.startDate),
+        endDate: convertFirestoreDateToDayjs(data.endDate),
+        options: options,
+      } as unknown as Availability;
+    }),
+  );
+  return availabilities;
+};
+
+export const fetchAvailabilitiesFromArtistId = async (
+  artistId: string,
+): Promise<Availability[]> => {
+  const queryAvailabilities = await getDocs(
+    query(collection(db, "availabilities"), where("artistId", "==", artistId)),
+  );
+  const availabilities = await Promise.all(
+    queryAvailabilities.docs.map(async (availability) => {
+      const data = availability.data();
+      const options: Option[] = await fetchOptionsFromAvailabilityId(
+        availability.id,
+      );
+      return {
+        id: availability.id,
+        artistId: artistId,
+        artistName: "",
+        region: data.region,
+        startDate: convertFirestoreDateToDayjs(data.startDate),
+        endDate: convertFirestoreDateToDayjs(data.endDate),
+        options: options,
+      } as unknown as Availability;
+    }),
+  );
+  return availabilities;
+};
+
+export const fetchConcertsFromArtistId = async (
+  artistId: string,
+  artistName: string,
+): Promise<Concert[]> => {
+  const queryConcerts = await getDocs(
+    query(collection(db, "concerts"), where("artistId", "==", artistId)),
+  );
+  const concerts = await Promise.all(
+    queryConcerts.docs.map(async (concert) => {
+      const data = concert.data();
+      const venue = await fetchSimpleVenue(data.venueId);
+
+      return {
+        id: concert.id,
+        artistId: artistId,
+        artistName: artistName,
+        organizer: data.organizer,
+        date: convertFirestoreDateToDayjs(data.date),
+        venueId: data.venueId,
+        venueName: venue.longName,
+      } as unknown as Concert;
+    }),
+  );
+  return concerts;
+};
+
+export const fetchOptionsFromAvailabilityId = async (
+  availabilityId: string,
+): Promise<Option[]> => {
+  const queryOptions = await getDocs(
+    query(
+      collection(db, "options"),
+      where("availabilityId", "==", availabilityId),
+    ),
+  );
+  const options = await Promise.all(
+    queryOptions.docs.map(async (option) => {
+      const data = option.data();
+      const venue = await fetchSimpleVenue(data.venueId);
+
+      return {
+        id: option.id,
+        availabilityId: availabilityId,
+        organizer: data.organizer,
+        date: convertFirestoreDateToDayjs(data.date),
+        venueId: data.venueId,
+        venueName: venue.longName,
+      } as unknown as Option;
+    }),
+  );
+  return options;
+};
+
+export const fetchArtists = async (): Promise<Artist[]> => {
+  const querySnapshot = await getDocs(collection(db, "artists"));
+  querySnapshot.forEach((doc) => {
+    console.log(
+      `${doc.id} => ${doc.data()},${doc.data().longName}, ${doc.data().shortName}}`,
+    );
+  });
+  return querySnapshot.docs.map((artist) => {
+    const data = artist.data();
+    return {
+      id: artist.id,
+      longName: data.longName,
+      shortName: data.shortName,
+      description: data.description,
+      availabilities: [],
+      concerts: [],
+    } as unknown as Artist;
+  });
+};
+
+export const fetchArtist = async (artistId: string): Promise<Artist> => {
+  const artist = await getDoc(doc(db, "artists", artistId));
+
+  const data = artist.data();
+  if (data) {
+    const availabilities = await fetchAvailabilitiesFromArtistId(artistId);
+    const concerts = await fetchConcertsFromArtistId(artistId, data.longName);
+    return {
+      id: artist.id,
+      longName: data.longName,
+      shortName: data.shortName,
+      description: data.description,
+      availabilities: availabilities,
+      concerts: concerts,
+    } as unknown as Artist;
+  }
+  return {} as unknown as Artist;
+};
+
+export const fetchSimpleArtist = async (artistId: string): Promise<Artist> => {
+  const artistDoc = await getDoc(doc(db, "artists", artistId));
+  const data = artistDoc.data();
+  if (data) {
+    return {
+      id: artistId,
+      longName: data.longName,
+      shortName: data.shortName,
+      description: data.description,
+      availabilities: [],
+      concerts: [],
+    } as unknown as Artist;
+  }
+  return {} as unknown as Artist;
+};
+
+export const fetchSimpleVenue = async (venueId: string): Promise<Venue> => {
+  const venueDoc = await getDoc(doc(db, "venues", venueId));
+  const data = venueDoc.data();
+  if (data) {
+    return {
+      id: venueId,
+      shortName: data.shortName,
+      longName: data.longName,
+      region: data.region,
+      description: data.description,
+      concerts: [],
+    } as unknown as Venue;
+  }
+  return {} as unknown as Venue;
+};
+
+export const addAvailability = async (
   availability: Availability,
-  artistShortName: string,
-): void => {
-  const currentArtists = fetchArtists();
-  const artistIndex = currentArtists.findIndex(
-    (artist) => artist.shortName === artistShortName,
-  );
-  if (artistIndex === undefined) {
-    throw new Response("Not Found", { status: 404 });
-  }
-  currentArtists[artistIndex].availabilities =
-    currentArtists[artistIndex].availabilities.concat(availability);
-  localStorage.setItem("artists", JSON.stringify(currentArtists));
+): Promise<void> => {
+  const docRef = await addDoc(collection(db, "availabilities"), {
+    artistId: availability.artistId,
+    region: availability.region,
+    startDate: Timestamp.fromDate(availability.startDate.toDate()),
+    endDate: Timestamp.fromDate(availability.endDate.toDate()),
+  });
+  console.log("Document written with ID: ", docRef.id);
 };
 
-export const validateOption = (optionId: number): void => {
-  const currentArtists = fetchArtists();
-  const artistIndex = currentArtists.findIndex((artist) =>
-    artist.availabilities.some((availability) =>
-      availability.options?.some((option) => option.id === optionId),
-    ),
-  );
-  if (artistIndex === undefined) {
-    throw new Response("Not Found", { status: 404 });
-  }
-  const availabilityIndex = currentArtists[
-    artistIndex
-  ].availabilities.findIndex((availability) =>
-    availability.options?.some((option) => option.id === optionId),
-  );
-  if (availabilityIndex === undefined) {
-    throw new Response("Not Found", { status: 404 });
-  }
-  const optionIndex = currentArtists[artistIndex].availabilities[
-    availabilityIndex
-  ].options.findIndex((option) => option.id === optionId);
-  if (optionIndex === undefined) {
-    throw new Response("Not Found", { status: 404 });
-  }
-
-  const currentOption =
-    currentArtists[artistIndex].availabilities[availabilityIndex].options[
-      optionIndex
-    ];
-  const newConcert: Concert = {
-    id: Math.random() * 1000,
-    date: currentOption.date,
-    organizer: currentOption.organizer,
-    venue: currentOption.venue,
+export const createOptionFromAvailability = async (
+  availability: Availability,
+  date: dayjs.Dayjs,
+): Promise<void> => {
+  const optionData = {
+    organizer: "Orga Connectour",
+    venueId: "3",
+    artistId: availability.artistId,
+    availabilityId: availability.id,
+    date: Timestamp.fromDate(date.toDate()),
   };
-  currentArtists[artistIndex].concerts =
-    currentArtists[artistIndex].concerts.concat(newConcert);
 
-  currentArtists[artistIndex].availabilities[availabilityIndex].options.splice(
-    optionIndex,
-    1,
-  );
-
-  localStorage.setItem("artists", JSON.stringify(currentArtists));
+  const optionRef = await addDoc(collection(db, "options"), optionData);
+  console.log("Option created with ID: ", optionRef.id);
 };
 
-export const rejectOption = (optionId: number): void => {
-  const currentArtists = fetchArtists();
-  const artistIndex = currentArtists.findIndex((artist) =>
-    artist.availabilities.some((availability) =>
-      availability.options.some((option) => option.id === optionId),
-    ),
-  );
-  if (artistIndex === undefined) {
-    throw new Response("Not Found", { status: 404 });
-  }
-  const availabilityIndex = currentArtists[
-    artistIndex
-  ].availabilities.findIndex((availability) =>
-    availability.options.some((option) => option.id === optionId),
-  );
-  if (availabilityIndex === undefined) {
-    throw new Response("Not Found", { status: 404 });
-  }
-  const optionIndex = currentArtists[artistIndex].availabilities[
-    availabilityIndex
-  ].options.findIndex((option) => option.id === optionId);
-  if (optionIndex === undefined) {
-    throw new Response("Not Found", { status: 404 });
-  }
+export const validateOption = async (option: Option): Promise<void> => {
+  const availability = await fetchSimpleAvailability(option.availabilityId);
 
-  currentArtists[artistIndex].availabilities[availabilityIndex].options.splice(
-    optionIndex,
-    1,
-  );
+  const concertData = {
+    organizer: option.organizer,
+    artistId: availability.artistId,
+    venueId: option.venueId,
+    date: Timestamp.fromDate(option.date.toDate()),
+  };
 
-  localStorage.setItem("artists", JSON.stringify(currentArtists));
+  // Add the concert to the "concerts" collection
+  const concertRef = await addDoc(collection(db, "concerts"), concertData);
+  console.log("Concert created with ID: ", concertRef.id);
+
+  // Delete the option from the "options" collection
+  await deleteDoc(doc(db, "options", option.id));
+  console.log("Option deleted with ID: ", option.id);
+};
+
+export const cancelOption = async (optionId: string): Promise<void> => {
+  // Delete the option from the "options" collection
+  await deleteDoc(doc(db, "options", optionId));
+  console.log("Option deleted with ID: ", optionId);
 };

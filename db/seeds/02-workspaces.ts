@@ -2,61 +2,190 @@
 /* SPDX-License-Identifier: MIT */
 
 import { Firestore, Timestamp } from "@google-cloud/firestore";
-import { WorkspaceInput } from "../models";
-import { testUsers as users } from "./01-users";
+import { ArtistInput } from "../models/artist";
+import { AvailabilityInput } from "../models/availability";
+import { ConcertInput } from "../models/concert";
+import { OptionInput } from "../models/option";
+import { VenueInput } from "../models/venue";
 
-/**
- * Test workspaces.
- */
-export const testWorkspaces: (WorkspaceInput & { id: string })[] = [
+export const testArtists: (ArtistInput & { id: string })[] = [
   {
-    id: "DwYchGFGpk",
-    ownerId: users[0].localId!,
-    name: "Personal workspace",
-    created: Timestamp.fromDate(new Date(+users[0].createdAt!)),
-    updated: Timestamp.fromDate(new Date(+users[0].createdAt!)),
-    archived: null,
+    id: "0",
+    shortName: "malkavian",
+    longName: "Malkavian",
+    description: "Black/Death",
   },
   {
-    id: "YfYKTcO9q9",
-    ownerId: users[1].localId!,
-    name: "Personal workspace",
-    created: Timestamp.fromDate(new Date(+users[1].createdAt!)),
-    updated: Timestamp.fromDate(new Date(+users[1].createdAt!)),
-    archived: null,
+    id: "1",
+    shortName: "gojira",
+    longName: "Gojira",
+    description: "Prog",
   },
   {
-    id: "c2OsmUvFMY",
-    ownerId: users[2].localId!,
-    name: "Personal workspace",
-    created: Timestamp.fromDate(new Date(+users[2].createdAt!)),
-    updated: Timestamp.fromDate(new Date(+users[2].createdAt!)),
-    archived: null,
+    id: "2",
+    shortName: "sierra",
+    longName: "Sierra",
+    description: "EBM",
   },
   {
-    id: "uTqcGw4qn7",
-    ownerId: users[3].localId!,
-    name: "Personal workspace",
-    created: Timestamp.fromDate(new Date(+users[3].createdAt!)),
-    updated: Timestamp.fromDate(new Date(+users[3].createdAt!)),
-    archived: null,
+    id: "3",
+    shortName: "codeorange",
+    longName: "Code Orange",
+    description: "Metalcore",
+  },
+];
+
+export const testAvailabilities: (AvailabilityInput & { id: string })[] = [
+  {
+    id: "0",
+    artistId: "0",
+    region: "Poitou-Charentes",
+    startDate: Timestamp.fromDate(new Date("2025-01-01")),
+    endDate: Timestamp.fromDate(new Date("2025-01-31")),
   },
   {
-    id: "vBHHgg5ydn",
-    ownerId: users[4].localId!,
-    name: "Personal workspace",
-    created: Timestamp.fromDate(new Date(+users[4].createdAt!)),
-    updated: Timestamp.fromDate(new Date(+users[4].createdAt!)),
-    archived: null,
+    id: "1",
+    artistId: "0",
+    region: "Creuse",
+    startDate: Timestamp.fromDate(new Date("2025-02-01")),
+    endDate: Timestamp.fromDate(new Date("2025-02-28")),
+  },
+  {
+    id: "2",
+    artistId: "1",
+    region: "Poitou-Charentes",
+    startDate: Timestamp.fromDate(new Date("2025-01-01")),
+    endDate: Timestamp.fromDate(new Date("2025-01-31")),
+  },
+  {
+    id: "3",
+    artistId: "1",
+    region: "Creuse",
+    startDate: Timestamp.fromDate(new Date("2025-02-01")),
+    endDate: Timestamp.fromDate(new Date("2025-02-28")),
+  },
+  {
+    id: "4",
+    artistId: "2",
+    region: "Poitou-Charentes",
+    startDate: Timestamp.fromDate(new Date("2025-01-01")),
+    endDate: Timestamp.fromDate(new Date("2025-01-31")),
+  },
+  {
+    id: "5",
+    artistId: "2",
+    region: "Creuse",
+    startDate: Timestamp.fromDate(new Date("2025-02-01")),
+    endDate: Timestamp.fromDate(new Date("2025-02-28")),
+  },
+  {
+    id: "6",
+    artistId: "3",
+    region: "Poitou-Charentes",
+    startDate: Timestamp.fromDate(new Date("2025-01-01")),
+    endDate: Timestamp.fromDate(new Date("2025-01-31")),
+  },
+  {
+    id: "7",
+    artistId: "3",
+    region: "Creuse",
+    startDate: Timestamp.fromDate(new Date("2025-02-01")),
+    endDate: Timestamp.fromDate(new Date("2025-02-28")),
+  },
+];
+
+export const testOptions: (OptionInput & { id: string })[] = [
+  {
+    id: "0",
+    organizer: "Crumble Fight",
+    venueId: "3",
+    artistId: "0",
+    availabilityId: "1",
+    date: Timestamp.fromDate(new Date("2025-02-15T20:00:00")),
+  },
+];
+
+export const testConcerts: (ConcertInput & { id: string })[] = [
+  {
+    id: "0",
+    date: Timestamp.fromDate(new Date("2025-03-01T20:00:00")),
+    organizer: "Live Nation",
+    venueId: "0", // Le Trianon
+    artistId: "0",
+  },
+  {
+    id: "1",
+    date: Timestamp.fromDate(new Date("2025-04-01T21:00:00")),
+    organizer: "AEG Presents",
+    venueId: "1", // Le Transbordeur
+    artistId: "1",
+  },
+  {
+    id: "2",
+    date: Timestamp.fromDate(new Date("2025-03-01T20:00:00")),
+    organizer: "Live Nation",
+    venueId: "0", // Le Trianon
+    artistId: "2",
+  },
+];
+
+export const testVenues: (VenueInput & { id: string })[] = [
+  {
+    id: "0",
+    shortName: "trianon",
+    longName: "Le Trianon",
+    region: "Paris, France",
+    description: "A historic theater in Paris.",
+  },
+  {
+    id: "1",
+    shortName: "transbordeur",
+    longName: "Le Transbordeur",
+    region: "Lyon, France",
+    description: "A popular concert venue in Lyon.",
+  },
+  {
+    id: "2",
+    shortName: "rockarena",
+    longName: "Rock Arena",
+    region: "Bordeaux, France",
+    description: "A large venue for rock concerts.",
+  },
+  {
+    id: "3",
+    shortName: "coldcrash",
+    longName: "Cold Crash",
+    region: "Marseille, France",
+    description: "An intimate venue for indie bands.",
   },
 ];
 
 export async function seed(db: Firestore) {
   const batch = db.batch();
 
-  for (const { id, ...workspace } of testWorkspaces) {
-    const ref = db.doc(`workspace/${id}`);
-    batch.set(ref, workspace, { merge: true });
+  for (const { id, ...artist } of testArtists) {
+    const ref = db.doc(`artists/${id}`);
+    batch.set(ref, artist, { merge: true });
+  }
+
+  for (const { id, ...availability } of testAvailabilities) {
+    const ref = db.doc(`availabilities/${id}`);
+    batch.set(ref, availability, { merge: true });
+  }
+
+  for (const { id, ...option } of testOptions) {
+    const ref = db.doc(`options/${id}`);
+    batch.set(ref, option, { merge: true });
+  }
+
+  for (const { id, ...concert } of testConcerts) {
+    const ref = db.doc(`concerts/${id}`);
+    batch.set(ref, concert, { merge: true });
+  }
+
+  for (const { id, ...venue } of testVenues) {
+    const ref = db.doc(`venues/${id}`);
+    batch.set(ref, venue, { merge: true });
   }
 
   await batch.commit();

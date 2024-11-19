@@ -1,8 +1,10 @@
 import { Dayjs } from "dayjs";
 
 export type Option = {
-  id: number;
+  id: string;
   organizer: string;
-  venue: string;
+  availabilityId: string;
+  venueId: string;
+  venueName: string;
   date: Dayjs;
 };

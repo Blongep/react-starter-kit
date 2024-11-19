@@ -1,0 +1,126 @@
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import { Box, IconButton, Stack, Table, Typography } from "@mui/joy";
+import dayjs, { Dayjs } from "dayjs";
+//import { rejectOption, validateOption } from "../services/artist-service";
+import { DatePicker } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import "dayjs/locale/fr";
+import { useEffect, useState } from "react";
+import { createOptionFromAvailability } from "../services/artist-service";
+import { Availability } from "../types/availability";
+import { Option } from "../types/option";
+
+export function AvailabilityProdGrid(
+  availabilitiesProps: AvailabilityGridProps,
+): JSX.Element {
+  const [hourMap, setHourMap] = useState(new Map());
+  const updateMap = (k: string, v: Dayjs) => {
+    setHourMap(hourMap.set(k, v));
+  };
+
+  useEffect(() => {
+    availabilitiesProps.availabilities.forEach((availability: Availability) => {
+      updateMap(availability.id, availability.startDate);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [availabilitiesProps]);
+
+  return (
+    <Table aria-label="basic table">
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fr">
+        <thead>
+          <tr>
+            <th style={{ width: "20%" }}>Artiste</th>
+            <th style={{ width: "20%" }}>Région</th>
+            <th style={{ width: "20%" }}>Date de début</th>
+            <th style={{ width: "20%" }}>Date de fin</th>
+            <th style={{ width: "20%" }}>Poser une option</th>
+          </tr>
+        </thead>
+        <tbody>
+          {availabilitiesProps.availabilities.map(
+            (availability: Availability) => (
+              <>
+                <tr key={availability.id}>
+                  <td>
+                    <Typography>{availability.artistName}</Typography>
+                  </td>
+                  <td>
+                    <Typography>{availability.region}</Typography>
+                  </td>
+                  <td>
+                    <Typography>
+                      {dayjs(availability.startDate).format("DD/MM/YYYY")}
+                    </Typography>
+                  </td>
+                  <td>
+                    <Typography>
+                      {dayjs(availability.endDate).format("DD/MM/YYYY")}
+                    </Typography>
+                  </td>
+                  <td>
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      sx={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <DatePicker
+                        label="Date"
+                        value={availability.startDate}
+                        onChange={(newValue: Dayjs | null) => {
+                          if (newValue) {
+                            updateMap(availability.id, newValue);
+                          }
+                        }}
+                      />
+                      <IconButton
+                        sx={{ mb: 1 }}
+                        variant="plain"
+                        onClick={() => {
+                          createOptionFromAvailability(
+                            availability,
+                            hourMap.get(availability.id),
+                          );
+                          availabilitiesProps.updateState();
+                          updateMap(availability.id, availability.startDate);
+                        }}
+                      >
+                        <CheckCircleOutlineIcon />
+                      </IconButton>
+                    </Stack>
+                  </td>
+                </tr>
+                {availability.options?.map((option: Option) => (
+                  <Box key={option.id} sx={{ ml: 3, width: "80%" }}>
+                    <tr>
+                      <td>
+                        <Typography>{option.organizer}</Typography>
+                      </td>
+                      <td>
+                        <Typography>{option.venueName}</Typography>
+                      </td>
+                      <td>
+                        <Typography>
+                          {dayjs(option.date).format("DD/MM/YYYY")}
+                        </Typography>
+                      </td>
+                    </tr>
+                  </Box>
+                ))}
+              </>
+            ),
+          )}
+        </tbody>
+      </LocalizationProvider>
+    </Table>
+  );
+}
+
+export type AvailabilityGridProps = {
+  availabilities: Availability[];
+  updateState: () => void;
+};

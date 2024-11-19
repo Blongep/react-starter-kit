@@ -1,8 +1,11 @@
 import { Dayjs } from "dayjs";
 
 export type Concert = {
-  id: number;
+  id: string;
   organizer: string;
-  venue: string;
+  artistName: string;
+  artistId: string;
+  venueId: string;
+  venueName: string;
   date: Dayjs;
 };

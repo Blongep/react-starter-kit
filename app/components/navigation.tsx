@@ -1,11 +1,7 @@
 /* SPDX-FileCopyrightText: 2014-present Kriasoft */
 /* SPDX-License-Identifier: MIT */
 
-import {
-  AssignmentTurnedInRounded,
-  ChatRounded,
-  Dashboard,
-} from "@mui/icons-material";
+import { Dashboard } from "@mui/icons-material";
 import {
   List,
   ListItem,
@@ -29,13 +25,16 @@ export const Navigation = memo(function Navigation(
       role="navigation"
       {...other}
     >
-      <NavItem path="/dashboard" label="Dashboard" icon={<Dashboard />} />
       <NavItem
-        path="/tasks"
-        label="Tasks"
-        icon={<AssignmentTurnedInRounded />}
+        path="/dashboard/agent"
+        label="Dashboard Agent"
+        icon={<Dashboard />}
       />
-      <NavItem path="/messages" label="Messages" icon={<ChatRounded />} />
+      <NavItem
+        path="/dashboard/prod"
+        label="Dashboard Prod"
+        icon={<Dashboard />}
+      />
     </List>
   );
 });
