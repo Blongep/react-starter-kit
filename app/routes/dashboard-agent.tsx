@@ -20,7 +20,7 @@ export const Component = function DashboardAgent(): JSX.Element {
   usePageEffect({ title: "Dashboard Agent" });
 
   const [artistsData, setArtistsData] = useState<Artist[]>([]);
-  const [currentUser] = useState(useCurrentUser());
+  const currentUser = useCurrentUser();
 
   useEffect(() => {
     async function fetchData() {

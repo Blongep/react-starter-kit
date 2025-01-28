@@ -56,6 +56,7 @@ export default defineProject(async ({ mode }) => {
     ],
 
     server: {
+      host: true,
       proxy: {
         "/api": {
           target: process.env.LOCAL_API_ORIGIN ?? process.env.API_ORIGIN,

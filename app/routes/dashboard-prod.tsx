@@ -2,19 +2,57 @@
 /* SPDX-License-Identifier: MIT */
 
 import { Box, Container, Stack, Typography } from "@mui/joy";
+import Divider from "@mui/joy/Divider";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
 import { useEffect, useState } from "react";
-import { AvailabilityProdGrid } from "../components/availabilites-prod-grid";
+import { AvailabilityProdGrid } from "../components/availabilities-prod-grid";
+import { OptionsProdGrid } from "../components/options-prod-grid";
 import { useCurrentUser } from "../core/auth";
 import { usePageEffect } from "../core/page";
 import { fetchAvailabilities } from "../services/artist-service";
 import { Availability } from "../types/availability";
 
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
 export const Component = function DashboardProd(): JSX.Element {
   usePageEffect({ title: "Dashboard Prod" });
 
   const [availabilityData, setAvailabilityData] = useState<Availability[]>([]);
-  const [currentUser] = useState(useCurrentUser());
+  const currentUser = useCurrentUser();
 
+  const [value, setValue] = useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
+
+  function CustomTabPanel(props: TabPanelProps) {
+    const { children, value, index, ...other } = props;
+
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      </div>
+    );
+  }
+
+  function a11yProps(index: number) {
+    return {
+      id: `simple-tab-${index}`,
+      "aria-controls": `simple-tabpanel-${index}`,
+    };
+  }
   async function fetchAvailabilityData() {
     if (currentUser) {
       try {
@@ -41,15 +79,38 @@ export const Component = function DashboardProd(): JSX.Element {
         Dashboard Prod
       </Typography>
 
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="basic tabs example"
+        >
+          <Tab label="Disponibilités" {...a11yProps(0)} />
+          <Tab label="Options" {...a11yProps(1)} />
+        </Tabs>
+      </Box>
+      <CustomTabPanel value={value} index={0}>
+        <Typography sx={{ mb: 1 }} level="h3">
+          Disponibilités
+        </Typography>
+        <AvailabilityProdGrid
+          availabilities={availabilityData || []}
+          updateState={handleUpdate}
+        />
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={1}>
+        <Typography sx={{ mb: 1 }} level="h3">
+          Options
+        </Typography>
+        <OptionsProdGrid
+          availabilities={availabilityData || []}
+          updateState={handleUpdate}
+        />
+      </CustomTabPanel>
+
       <Box sx={{ width: "100%" }}>
         <Stack spacing={3}>
-          <Typography sx={{ mb: 1 }} level="h3">
-            Disponibilités
-          </Typography>
-          <AvailabilityProdGrid
-            availabilities={availabilityData || []}
-            updateState={handleUpdate}
-          />
+          <Divider />
         </Stack>
 
         {/* {venueData.map((artist: Artist) => (

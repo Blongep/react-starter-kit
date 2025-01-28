@@ -1,5 +1,5 @@
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import { Box, IconButton, Stack, Table, Typography } from "@mui/joy";
+import { IconButton, Stack, Table, Typography } from "@mui/joy";
 import dayjs, { Dayjs } from "dayjs";
 //import { rejectOption, validateOption } from "../services/artist-service";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -9,7 +9,6 @@ import "dayjs/locale/fr";
 import { useEffect, useState } from "react";
 import { createOptionFromAvailability } from "../services/artist-service";
 import { Availability } from "../types/availability";
-import { Option } from "../types/option";
 
 export function AvailabilityProdGrid(
   availabilitiesProps: AvailabilityGridProps,
@@ -94,23 +93,6 @@ export function AvailabilityProdGrid(
                     </Stack>
                   </td>
                 </tr>
-                {availability.options?.map((option: Option) => (
-                  <Box key={option.id} sx={{ ml: 3, width: "80%" }}>
-                    <tr>
-                      <td>
-                        <Typography>{option.organizer}</Typography>
-                      </td>
-                      <td>
-                        <Typography>{option.venueName}</Typography>
-                      </td>
-                      <td>
-                        <Typography>
-                          {dayjs(option.date).format("DD/MM/YYYY")}
-                        </Typography>
-                      </td>
-                    </tr>
-                  </Box>
-                ))}
               </>
             ),
           )}

@@ -1,0 +1,9 @@
+diff a/app/vite.config.ts b/app/vite.config.ts	(rejected hunks)
+@@ -56,6 +56,7 @@
+     ],
+ 
+     server: {
++      host: true,
+       proxy: {
+         "/api": {
+           target: process.env.LOCAL_API_ORIGIN ?? process.env.API_ORIGIN,

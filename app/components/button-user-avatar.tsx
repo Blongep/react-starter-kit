@@ -14,11 +14,13 @@ import {
   MenuItem,
 } from "@mui/joy";
 import { getAuth, signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../core/auth";
 
 export function UserAvatarButton(props: UserAvatarButtonProps): JSX.Element {
   const { sx, ...other } = props;
   const user = useCurrentUser()!;
+  const navigate = useNavigate();
 
   return (
     <Dropdown>
@@ -43,7 +45,15 @@ export function UserAvatarButton(props: UserAvatarButtonProps): JSX.Element {
           </ListItemDecorator>
           <ListItemContent sx={{ mr: 2 }}>Settings</ListItemContent>
         </MenuItem>
-        <MenuItem onClick={() => signOut(getAuth())}>
+        <MenuItem
+          onClick={() =>
+            signOut(getAuth())
+              .then(() => navigate("/"))
+              .finally(() => {
+                window.location.reload();
+              })
+          }
+        >
           <ListItemDecorator sx={{ ml: 0.5 }}>
             <LogoutRounded />
           </ListItemDecorator>

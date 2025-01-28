@@ -6,6 +6,7 @@ import { ArtistInput } from "../models/artist";
 import { AvailabilityInput } from "../models/availability";
 import { ConcertInput } from "../models/concert";
 import { OptionInput } from "../models/option";
+import { UserTypeInput } from "../models/userType";
 import { VenueInput } from "../models/venue";
 
 export const testArtists: (ArtistInput & { id: string })[] = [
@@ -160,6 +161,19 @@ export const testVenues: (VenueInput & { id: string })[] = [
   },
 ];
 
+export const testUserType: (UserTypeInput & { id: string })[] = [
+  {
+    id: "0",
+    type: "agent",
+    userId: "BrFCVMNZE8gnLkffGSLBqTxxT4K3",
+  },
+  {
+    id: "1",
+    type: "prod",
+    userId: "ElZSqHwkVHWKn4Jh7XAJhukCsum1",
+  },
+];
+
 export async function seed(db: Firestore) {
   const batch = db.batch();
 
@@ -186,6 +200,11 @@ export async function seed(db: Firestore) {
   for (const { id, ...venue } of testVenues) {
     const ref = db.doc(`venues/${id}`);
     batch.set(ref, venue, { merge: true });
+  }
+
+  for (const { id, ...userType } of testUserType) {
+    const ref = db.doc(`userTypes/${id}`);
+    batch.set(ref, userType, { merge: true });
   }
 
   await batch.commit();

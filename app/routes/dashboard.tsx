@@ -1,34 +1,39 @@
 import { Box, Button, Container, Typography } from "@mui/material";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useCurrentUserType } from "../core/auth";
 
 export const Component = function Dashboard(): JSX.Element {
+  const [currentUserType] = useState(useCurrentUserType());
+  console.log(currentUserType);
   return (
     <Container>
       <Box sx={{ textAlign: "center", mt: 5 }}>
         <Typography variant="h4" gutterBottom>
           Welcome to the Dashboard
         </Typography>
-        <Typography variant="h6" gutterBottom>
-          Please choose an option below:
-        </Typography>
         <Box sx={{ mt: 3 }}>
-          <Button
-            variant="contained"
-            color="primary"
-            component={Link}
-            to="/dashboard/agent"
-            sx={{ mr: 2 }}
-          >
-            Agent Dashboard
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            component={Link}
-            to="/dashboard/prod"
-          >
-            Prod Dashboard
-          </Button>
+          {currentUserType?.type === "agent" && (
+            <Button
+              variant="contained"
+              color="primary"
+              component={Link}
+              to="/dashboard/agent"
+              sx={{ mr: 2 }}
+            >
+              Agent Dashboard
+            </Button>
+          )}
+          {currentUserType?.type === "prod" && (
+            <Button
+              variant="contained"
+              color="secondary"
+              component={Link}
+              to="/dashboard/prod"
+            >
+              Prod Dashboard
+            </Button>
+          )}
         </Box>
       </Box>
     </Container>

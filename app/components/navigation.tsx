@@ -10,13 +10,15 @@ import {
   ListItemDecorator,
   ListProps,
 } from "@mui/joy";
-import { ReactNode, memo } from "react";
+import { ReactNode, memo, useState } from "react";
 import { Link, useMatch } from "react-router-dom";
+import { useCurrentUserType } from "../core/auth";
 
 export const Navigation = memo(function Navigation(
   props: NavigationProps,
 ): JSX.Element {
   const { sx, ...other } = props;
+  const [currentUserType] = useState(useCurrentUserType());
 
   return (
     <List
@@ -25,16 +27,20 @@ export const Navigation = memo(function Navigation(
       role="navigation"
       {...other}
     >
-      <NavItem
-        path="/dashboard/agent"
-        label="Dashboard Agent"
-        icon={<Dashboard />}
-      />
-      <NavItem
-        path="/dashboard/prod"
-        label="Dashboard Prod"
-        icon={<Dashboard />}
-      />
+      {currentUserType?.type === "agent" && (
+        <NavItem
+          path="/dashboard/agent"
+          label="Dashboard Agent"
+          icon={<Dashboard />}
+        />
+      )}
+      {currentUserType?.type === "prod" && (
+        <NavItem
+          path="/dashboard/prod"
+          label="Dashboard Prod"
+          icon={<Dashboard />}
+        />
+      )}
     </List>
   );
 });
