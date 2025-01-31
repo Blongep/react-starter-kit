@@ -27,28 +27,28 @@ export function OptionArtistGrid(optionsProps: OptionGridProps): JSX.Element {
             availability.options?.length > 0 && (
               <tr key={availability.id}>
                 <td>
-                  <Typography>{availability.region}</Typography>
+                  <Typography  color="primary">{availability.region}</Typography>
                 </td>
                 <td>
-                  <Typography>
+                  <Typography  color="primary">
                     {dayjs(availability.startDate).format("DD/MM/YYYY")}
                   </Typography>
                 </td>
                 <td>
-                  <Typography>
+                  <Typography  color="primary">
                     {dayjs(availability.endDate).format("DD/MM/YYYY")}
                   </Typography>
                 </td>
                 {availability.options?.map((option: Option) => (
                   <>
                     <td>
-                      <Typography>{option.organizer}</Typography>
+                      <Typography  color="primary">{option.organizer}</Typography>
                     </td>
                     <td>
-                      <Typography>{option.venueName}</Typography>
+                      <Typography  color="primary">{option.venueName}</Typography>
                     </td>
                     <td>
-                      <Typography>
+                      <Typography  color="primary">
                         {dayjs(option.date).format("DD/MM/YYYY")}
                       </Typography>
                     </td>

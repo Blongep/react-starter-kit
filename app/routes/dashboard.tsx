@@ -9,7 +9,7 @@ export const Component = function Dashboard(): JSX.Element {
   return (
     <Container>
       <Box sx={{ textAlign: "center", mt: 5 }}>
-        <Typography variant="h4" gutterBottom>
+        <Typography  color="primary" variant="h4" gutterBottom>
           Welcome to the Dashboard
         </Typography>
         <Box sx={{ mt: 3 }}>

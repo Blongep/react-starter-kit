@@ -74,14 +74,14 @@ export const Component = function ArtistPage(): JSX.Element {
 
   return (
     <Container sx={{ py: 2 }}>
-      <Typography sx={{ mb: 2 }} level="h2">
+      <Typography  color="primary" sx={{ mb: 2 }} level="h2">
         {artistData?.longName}
       </Typography>
 
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Card sx={{ mb: 2 }} key={artistData?.id}>
           <CardContent sx={{ minHeight: 150 }}>
-            <Typography>{artistData?.description}</Typography>
+            <Typography  color="primary">{artistData?.description}</Typography>
           </CardContent>
         </Card>
         <Tabs
@@ -96,7 +96,7 @@ export const Component = function ArtistPage(): JSX.Element {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <Typography sx={{ mb: 1 }} level="h3">
+        <Typography  color="primary" sx={{ mb: 1 }} level="h3">
           Disponibilités
         </Typography>
         <AvailabilityArtistGrid
@@ -105,7 +105,7 @@ export const Component = function ArtistPage(): JSX.Element {
         />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <Typography sx={{ mb: 1 }} level="h3">
+        <Typography  color="primary" sx={{ mb: 1 }} level="h3">
           Options
         </Typography>
         <OptionArtistGrid
@@ -114,13 +114,13 @@ export const Component = function ArtistPage(): JSX.Element {
         />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        <Typography sx={{ mb: 1 }} level="h3">
+        <Typography  color="primary" sx={{ mb: 1 }} level="h3">
           Dates programmées
         </Typography>
         <ConcertGrid concerts={artistData?.concerts || []} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={3}>
-        <Typography sx={{ mb: 1 }} level="h3">
+        <Typography  color="primary" sx={{ mb: 1 }} level="h3">
           Nouvelle disponibilité
         </Typography>
         <AvailabilityForm

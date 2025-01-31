@@ -43,18 +43,18 @@ export function AvailabilityProdGrid(
               <>
                 <tr key={availability.id}>
                   <td>
-                    <Typography>{availability.artistName}</Typography>
+                    <Typography  color="primary">{availability.artistName}</Typography>
                   </td>
                   <td>
-                    <Typography>{availability.region}</Typography>
+                    <Typography  color="primary">{availability.region}</Typography>
                   </td>
                   <td>
-                    <Typography>
+                    <Typography  color="primary">
                       {dayjs(availability.startDate).format("DD/MM/YYYY")}
                     </Typography>
                   </td>
                   <td>
-                    <Typography>
+                    <Typography  color="primary">
                       {dayjs(availability.endDate).format("DD/MM/YYYY")}
                     </Typography>
                   </td>

@@ -1,0 +1,26 @@
+# Ignore node_modules directory
+node_modules
+
+db
+edge
+scripts
+
+# Ignore build artifacts
+build
+dist
+
+# Ignore development files
+*.log
+.cache
+.husky
+.vscode
+.yarn
+.editorconfig
+.eslintrc.cjs
+.git*
+.pnp*
+.prettier*
+README*
+
+# Ignore package manager lock files
+package-lock.json

@@ -75,7 +75,7 @@ export const Component = function DashboardProd(): JSX.Element {
 
   return (
     <Container sx={{ py: 2 }}>
-      <Typography sx={{ mb: 2 }} level="h2">
+      <Typography  color="primary" sx={{ mb: 2 }} level="h2">
         Dashboard Prod
       </Typography>
 
@@ -90,7 +90,7 @@ export const Component = function DashboardProd(): JSX.Element {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <Typography sx={{ mb: 1 }} level="h3">
+        <Typography  color="primary" sx={{ mb: 1 }} level="h3">
           Disponibilités
         </Typography>
         <AvailabilityProdGrid
@@ -99,7 +99,7 @@ export const Component = function DashboardProd(): JSX.Element {
         />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <Typography sx={{ mb: 1 }} level="h3">
+        <Typography  color="primary" sx={{ mb: 1 }} level="h3">
           Options
         </Typography>
         <OptionsProdGrid
@@ -122,9 +122,9 @@ export const Component = function DashboardProd(): JSX.Element {
                 href={`/artist/${artist.shortName}`}
                 startDecorator={<OpenInNew />}
               >
-                <Typography level="h3">{artist.longName}</Typography>
+                <Typography  color="primary" level="h3">{artist.longName}</Typography>
               </Button>
-              <Typography>{artist.description}</Typography>
+              <Typography  color="primary">{artist.description}</Typography>
             </CardContent>
           </Card>
         ))} */}

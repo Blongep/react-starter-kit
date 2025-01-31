@@ -9,7 +9,7 @@ export function RootError(): JSX.Element {
 
   return (
     <Container sx={{ marginTop: "43vh" }} maxWidth="sm">
-      <Typography
+      <Typography  color="primary" 
         sx={{
           fontSize: "2em",
           fontWeight: 300,

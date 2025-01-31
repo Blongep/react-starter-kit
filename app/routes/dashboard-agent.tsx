@@ -34,7 +34,7 @@ export const Component = function DashboardAgent(): JSX.Element {
 
   return (
     <Container sx={{ py: 2 }}>
-      <Typography sx={{ mb: 2 }} level="h2">
+      <Typography  color="primary" sx={{ mb: 2 }} level="h2">
         Dashboard Agent
       </Typography>
 
@@ -54,9 +54,9 @@ export const Component = function DashboardAgent(): JSX.Element {
                 href={`/artist/${artist.id}`}
                 startDecorator={<OpenInNew />}
               >
-                <Typography level="h3">{artist.longName}</Typography>
+                <Typography  color="primary" level="h3">{artist.longName}</Typography>
               </Button>
-              <Typography>{artist.description}</Typography>
+              <Typography  color="primary">{artist.description}</Typography>
             </CardContent>
           </Card>
         ))}
