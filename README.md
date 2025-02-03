@@ -1,3 +1,5 @@
+docker build . --filename ./app/Dockerfile 
+
 # React Starter Kit
 
 <a href="https://github.com/kriasoft/react-starter-kit?sponsor=1"><img src="https://img.shields.io/badge/-GitHub-%23555.svg?logo=github-sponsors" height="20"></a>

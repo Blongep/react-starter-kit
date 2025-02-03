@@ -92,9 +92,6 @@ export const themeMui = materialExtendTheme({
         secondary: {
           main: '#f50057',
         },
-        neutral: {
-          main: '#f50057',
-        },
         background: {
           default: '#2c0405',
           paper: '#2c0405',

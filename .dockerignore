@@ -1,9 +1,5 @@
-# Ignore node_modules directory
-node_modules
-
 db
 edge
-scripts
 
 # Ignore build artifacts
 build
@@ -14,7 +10,6 @@ dist
 .cache
 .husky
 .vscode
-.yarn
 .editorconfig
 .eslintrc.cjs
 .git*

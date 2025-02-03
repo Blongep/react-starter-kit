@@ -1,5 +1,5 @@
 # Build Stage
-FROM node:18-alpine AS build-stage
+FROM node:latest AS build-stage
 
 WORKDIR /app
 
@@ -10,9 +10,13 @@ COPY . .
 # Install dependencies
 RUN corepack enable yarn
 
+RUN npm i
+
 RUN yarn install
 
 RUN yarn workspace app build
 
+WORKDIR /app/app
+
 EXPOSE 5173
-CMD ["yarn","workspace","app","start"]
+CMD ["vite", "serve"]
