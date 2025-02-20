@@ -55,5 +55,8 @@
     "bracketSameLine": false,
     "arrowParens": "always",
     "endOfLine": "lf"
+  },
+  "dependencies": {
+    "fetch": "^1.1.0"
   }
 }

@@ -26,6 +26,8 @@ const convertFirestoreDateToDayjs = (firestoreDate: Timestamp): dayjs.Dayjs => {
   return dayjs(firestoreDate.toDate());
 };
 
+const midnightThisMorning = (new Date()).setHours(0,0,0,0);
+
 export const fetchSimpleAvailability = async (
   availabilityId: string,
 ): Promise<Availability> => {
@@ -48,7 +50,7 @@ export const fetchSimpleAvailability = async (
 };
 
 export const fetchAvailabilities = async (): Promise<Availability[]> => {
-  const querySnapshot = await getDocs(collection(db, "availabilities"));
+  const querySnapshot = await getDocs(query(collection(db, "availabilities"), where("endDate", ">=", midnightThisMorning)));
   const availabilities = await Promise.all(
     querySnapshot.docs.map(async (availability) => {
       const data = availability.data();
@@ -130,6 +132,7 @@ export const fetchOptionsFromAvailabilityId = async (
     query(
       collection(db, "options"),
       where("availabilityId", "==", availabilityId),
+      where("date", ">=", midnightThisMorning)
     ),
   );
   const options = await Promise.all(

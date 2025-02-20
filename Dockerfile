@@ -19,4 +19,4 @@ RUN yarn workspace app build
 WORKDIR /app/app
 
 EXPOSE 5173
-CMD ["vite", "serve"]
+CMD ["vite", "serve", "--host"]

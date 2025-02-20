@@ -18,6 +18,12 @@ export function AvailabilityProdGrid(
     setHourMap(hourMap.set(k, v));
   };
 
+  // const [order, setOrder] = useState('asc')
+  // const [sortKey, setSortKey] = useState(Object.keys(rows[0])[0])
+  // const filter = (event: React.ChangeEvent<HTMLInputElement>) => {}
+  // const sort = (value: keyof Data[0], order: string) => {}
+  // const updateOrder = () => {}
+  
   useEffect(() => {
     availabilitiesProps.availabilities.forEach((availability: Availability) => {
       updateMap(availability.id, availability.startDate);
@@ -68,6 +74,9 @@ export function AvailabilityProdGrid(
                       }}
                     >
                       <DatePicker
+                        disablePast
+                        minDate={availability.startDate}
+                        maxDate={availability.endDate}
                         label="Date"
                         value={availability.startDate}
                         onChange={(newValue: Dayjs | null) => {

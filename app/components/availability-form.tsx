@@ -1,11 +1,14 @@
-import { Button, FormControl, Input, Stack } from "@mui/joy";
+import { Button, FormControl, Stack } from "@mui/joy";
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 import { DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { Dayjs } from "dayjs";
 import "dayjs/locale/fr";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { addAvailability } from "../services/artist-service";
+import { fetchRegionsDepartments } from "../services/ext-service";
 import { Availability } from "../types/availability";
 
 export function AvailabilityForm(
@@ -15,6 +18,14 @@ export function AvailabilityForm(
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
   const [region, setRegion] = useState<string>("");
 
+  const [regionsDepartments, setRegionsDepartments] = useState<string[]>([]);
+
+    useEffect(() => {
+      async function fetchData() {
+        setRegionsDepartments(await fetchRegionsDepartments());
+      }
+      fetchData();
+    }, []);
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fr">
       <form
@@ -39,6 +50,7 @@ export function AvailabilityForm(
         <Stack spacing={2}>
           <FormControl required>
             <DatePicker
+              disablePast
               label="Date de début"
               value={startDate}
               onChange={(newValue: Dayjs | null) => setStartDate(newValue)}
@@ -46,20 +58,26 @@ export function AvailabilityForm(
           </FormControl>
           <FormControl required>
             <DatePicker
+              disablePast
+              minDate={startDate}
               label="Date de fin"
               value={endDate}
               onChange={(newValue: Dayjs | null) => setEndDate(newValue)}
             />
           </FormControl>
           <FormControl required>
-            <Input
+            <Autocomplete
+              disablePortal
               value={region}
-              placeholder="Région…"
-              onChange={(event) => setRegion(event.target.value)}
+              options={regionsDepartments}
+              onChange={(event: any, newValue: FilmOptionType | null) => {
+                setRegion(newValue);
+              }}
+              renderInput={(params: any) => <TextField {...params} label="Region ou département" />}
             />
           </FormControl>
           <Button
-            disabled={startDate === null || endDate === null || region === null}
+            disabled={startDate === null || endDate === null || region === null || region === "" || startDate.isAfter(endDate)}
             type="submit"
             sx={{ mt: 1 }}
           >

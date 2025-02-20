@@ -41,6 +41,11 @@ export const Navigation = memo(function Navigation(
           icon={<Dashboard />}
         />
       )}
+      <NavItem
+          path="/dashboard/agent"
+          label="Dashboard Agent"
+          icon={<Dashboard />}
+        />
     </List>
   );
 });
