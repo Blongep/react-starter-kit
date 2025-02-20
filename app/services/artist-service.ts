@@ -40,7 +40,7 @@ export const fetchSimpleAvailability = async (
       id: availabilityId,
       artistId: data.artistId,
       artistName: "",
-      region: data.region,
+      zones: data.zones,
       startDate: convertFirestoreDateToDayjs(data.startDate),
       endDate: convertFirestoreDateToDayjs(data.endDate),
       options: [],
@@ -63,7 +63,7 @@ export const fetchAvailabilities = async (): Promise<Availability[]> => {
         id: availability.id,
         artistId: data.artistId,
         artistName: artist.longName,
-        region: data.region,
+        zones: data.zones,
         startDate: convertFirestoreDateToDayjs(data.startDate),
         endDate: convertFirestoreDateToDayjs(data.endDate),
         options: options,
@@ -89,7 +89,7 @@ export const fetchAvailabilitiesFromArtistId = async (
         id: availability.id,
         artistId: artistId,
         artistName: "",
-        region: data.region,
+        zones: data.zones,
         startDate: convertFirestoreDateToDayjs(data.startDate),
         endDate: convertFirestoreDateToDayjs(data.endDate),
         options: options,
@@ -229,7 +229,7 @@ export const addAvailability = async (
 ): Promise<void> => {
   const docRef = await addDoc(collection(db, "availabilities"), {
     artistId: availability.artistId,
-    region: availability.region,
+    zones: availability.zones,
     startDate: Timestamp.fromDate(availability.startDate.toDate()),
     endDate: Timestamp.fromDate(availability.endDate.toDate()),
   });

@@ -16,7 +16,20 @@ export function AvailabilityForm(
 ): JSX.Element {
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
-  const [region, setRegion] = useState<string>("");
+  const [zoneMap, setZoneMap] = useState(new Map<number,string>());
+  const updateMap = (k: number, v: string) => {
+    setZoneMap(zoneMap.set(k, v));
+  };
+
+  const deleteFromMap = (keyToDelete: number) => {
+    let tempMap = new Map<number,string>();
+    zoneMap.forEach((key: number, value: string) => {
+      if (key !== keyToDelete) {
+        tempMap.set(key, value);
+      }
+    })
+    setZoneMap(tempMap);
+  };
 
   const [regionsDepartments, setRegionsDepartments] = useState<string[]>([]);
 
@@ -25,7 +38,18 @@ export function AvailabilityForm(
         setRegionsDepartments(await fetchRegionsDepartments());
       }
       fetchData();
+      updateMap(0, "");
     }, []);
+
+  const addAutocomplete = () => {
+    const newKey = zoneMap.size;
+    updateMap(newKey, "");
+  };
+
+  const deleteAutocomplete = (key: number) => {
+    deleteFromMap(key)
+  };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fr">
       <form
@@ -37,12 +61,13 @@ export function AvailabilityForm(
             artistName: "",
             startDate: startDate as Dayjs,
             endDate: endDate as Dayjs,
-            region: region as string,
+            zones: zones.values as string[],
             options: [],
           };
           await addAvailability(newAvailability);
           availabilitiesFormProps.updateState();
-          setRegion("");
+          setZoneMap(new Map());
+          updateMap(0, "");
           setStartDate(null);
           setEndDate(null);
         }}
@@ -65,19 +90,24 @@ export function AvailabilityForm(
               onChange={(newValue: Dayjs | null) => setEndDate(newValue)}
             />
           </FormControl>
-          <FormControl required>
-            <Autocomplete
-              disablePortal
-              value={region}
-              options={regionsDepartments}
-              onChange={(event: any, newValue: FilmOptionType | null) => {
-                setRegion(newValue);
-              }}
-              renderInput={(params: any) => <TextField {...params} label="Region ou département" />}
-            />
-          </FormControl>
+          {zoneMap.keys().map((key: number) => (
+            <FormControl key={key} required>
+              <Autocomplete
+                disablePortal
+                value={zoneMap.get(key)}
+                options={regionsDepartments}
+                onChange={(event: any, newValue: FilmOptionType | null) => {
+                  updateMap(key, newValue);
+                }}
+                renderInput={(params: any) => <TextField {...params} label="Region ou département" />}
+              />
+            {key !== 0 && <Button onClick={() => deleteAutocomplete(key)}></Button>}
+            </FormControl>
+          ))}
+
+          <Button onClick={addAutocomplete}>Zone Supplémentaire</Button>
           <Button
-            disabled={startDate === null || endDate === null || region === null || region === "" || startDate.isAfter(endDate)}
+            disabled={startDate === null || endDate === null || startDate.isAfter(endDate)}
             type="submit"
             sx={{ mt: 1 }}
           >

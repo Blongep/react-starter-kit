@@ -36,7 +36,11 @@ export function OptionsProdGrid(
                     <Typography  color="primary">{availability.artistName}</Typography>
                   </td>
                   <td>
-                    <Typography  color="primary">{availability.region}</Typography>
+                    <Typography  color="primary">
+                      {availability.zones.reduce(
+                      (accumulator: string, currentValue: string) => currentValue + " " + accumulator,
+                      "",)}
+                    </Typography>
                   </td>
                   <td>
                     <Typography  color="primary">

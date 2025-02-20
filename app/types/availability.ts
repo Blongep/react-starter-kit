@@ -5,7 +5,7 @@ export type Availability = {
   id: string;
   artistId: string;
   artistName: string;
-  region: string;
+  zones: string[];
   startDate: Dayjs;
   endDate: Dayjs;
   options: Option[];

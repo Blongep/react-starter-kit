@@ -21,7 +21,11 @@ export function AvailabilityArtistGrid(
             <>
               <tr key={availability.id}>
                 <td>
-                  <Typography  color="primary">{availability.region}</Typography>
+                  <Typography  color="primary">
+                    {availability.zones.reduce(
+                      (accumulator: string, currentValue: string) => currentValue + " " + accumulator,
+                      "",)}
+                  </Typography>
                 </td>
                 <td>
                   <Typography  color="primary">
