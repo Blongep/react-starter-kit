@@ -1,13 +1,13 @@
 /* SPDX-FileCopyrightText: 2014-present Kriasoft */
 /* SPDX-License-Identifier: MIT */
 
-import { Firestore, Timestamp } from "@google-cloud/firestore";
-import { ArtistInput } from "../models/artist";
-import { AvailabilityInput } from "../models/availability";
-import { ConcertInput } from "../models/concert";
-import { OptionInput } from "../models/option";
-import { UserTypeInput } from "../models/userType";
-import { VenueInput } from "../models/venue";
+import {Firestore, Timestamp} from "@google-cloud/firestore"
+import {ArtistInput} from "../models/artist"
+import {AvailabilityInput} from "../models/availability"
+import {ConcertInput} from "../models/concert"
+import {OptionInput} from "../models/option"
+import {UserTypeInput} from "../models/userType"
+import {VenueInput} from "../models/venue"
 
 export const testArtists: (ArtistInput & { id: string })[] = [
   {
@@ -40,56 +40,56 @@ export const testAvailabilities: (AvailabilityInput & { id: string })[] = [
   {
     id: "0",
     artistId: "0",
-    region: ["Poitou-Charentes"],
+    zones: ["Poitou-Charentes"],
     startDate: Timestamp.fromDate(new Date("2025-01-01")),
     endDate: Timestamp.fromDate(new Date("2025-01-31")),
   },
   {
     id: "1",
     artistId: "0",
-    region: ["Creuse"],
+    zones: ["Creuse"],
     startDate: Timestamp.fromDate(new Date("2025-02-01")),
     endDate: Timestamp.fromDate(new Date("2025-02-28")),
   },
   {
     id: "2",
     artistId: "1",
-    region: ["Poitou-Charentes"],
+    zones: ["Poitou-Charentes"],
     startDate: Timestamp.fromDate(new Date("2025-01-01")),
     endDate: Timestamp.fromDate(new Date("2025-01-31")),
   },
   {
     id: "3",
     artistId: "1",
-    region: ["Creuse"],
+    zones: ["Creuse"],
     startDate: Timestamp.fromDate(new Date("2025-02-01")),
     endDate: Timestamp.fromDate(new Date("2025-02-28")),
   },
   {
     id: "4",
     artistId: "2",
-    region: ["Poitou-Charentes"],
+    zones: ["Poitou-Charentes"],
     startDate: Timestamp.fromDate(new Date("2025-01-01")),
     endDate: Timestamp.fromDate(new Date("2025-01-31")),
   },
   {
     id: "5",
     artistId: "2",
-    region: ["Creuse"],
+    zones: ["Creuse"],
     startDate: Timestamp.fromDate(new Date("2025-02-01")),
     endDate: Timestamp.fromDate(new Date("2025-02-28")),
   },
   {
     id: "6",
     artistId: "3",
-    region: ["Poitou-Charentes"],
+    zones: ["Poitou-Charentes"],
     startDate: Timestamp.fromDate(new Date("2025-01-01")),
     endDate: Timestamp.fromDate(new Date("2025-01-31")),
   },
   {
     id: "7",
     artistId: "3",
-    region: ["Creuse"],
+    zones: ["Creuse"],
     startDate: Timestamp.fromDate(new Date("2025-02-01")),
     endDate: Timestamp.fromDate(new Date("2025-02-28")),
   },

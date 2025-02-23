@@ -1,11 +1,10 @@
-import { Box, Button, Container, Typography } from "@mui/material";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useCurrentUserType } from "../core/auth";
+import {Box, Button, Container, Typography} from "@mui/material"
+import {useState} from "react"
+import {Link} from "react-router-dom"
+import {useCurrentUserType} from "../core/auth"
 
 export const Component = function Dashboard(): JSX.Element {
   const [currentUserType] = useState(useCurrentUserType());
-  console.log(currentUserType);
   return (
     <Container>
       <Box sx={{ textAlign: "center", mt: 5 }}>

@@ -1,7 +1,7 @@
-import { Table, Typography } from "@mui/joy";
-import dayjs from "dayjs";
+import {Table, Typography} from "@mui/joy"
+import dayjs from "dayjs"
 //import { rejectOption, validateOption } from "../services/artist-service";
-import { Availability } from "../types/availability";
+import {Availability} from "../types/availability"
 
 export function AvailabilityArtistGrid(
   availabilitiesProps: AvailabilityGridProps,
@@ -10,7 +10,7 @@ export function AvailabilityArtistGrid(
     <Table aria-label="basic table">
       <thead>
         <tr>
-          <th style={{ width: "33%" }}>Région</th>
+          <th style={{ width: "33%" }}>Zones</th>
           <th style={{ width: "33%" }}>Date de début</th>
           <th style={{ width: "33%" }}>Date de fin</th>
         </tr>

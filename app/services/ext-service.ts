@@ -11,6 +11,5 @@ export const fetchRegionsDepartments = async (): Promise<string[]> => {
   json = await response.json();
   result = result.concat(json.map((departement: any) =>departement.nom))
 
-  console.log(result);
   return result;
 };

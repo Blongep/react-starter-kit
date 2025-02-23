@@ -1,18 +1,18 @@
-import { Box, Card, CardContent, Container, Typography } from "@mui/joy";
-import Tab from "@mui/material/Tab";
-import Tabs from "@mui/material/Tabs";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import {Box, Card, CardContent, Container, Typography} from "@mui/joy"
+import Tab from "@mui/material/Tab"
+import Tabs from "@mui/material/Tabs"
+import {useEffect, useState} from "react"
+import {useParams} from "react-router-dom"
 import {
   AvailabilityArtistGrid,
   AvailabilityForm,
   ConcertGrid,
-} from "../components";
-import { OptionArtistGrid } from "../components/options-artist-grid";
-import { useCurrentUser } from "../core/auth";
-import { usePageEffect } from "../core/page";
-import { fetchArtist } from "../services/artist-service";
-import { Artist } from "../types/artist";
+} from "../components"
+import {OptionArtistGrid} from "../components/options-artist-grid"
+import {useCurrentUser} from "../core/auth"
+import {usePageEffect} from "../core/page"
+import {fetchArtist} from "../services/artist-service"
+import {Artist} from "../types/artist"
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -58,6 +58,7 @@ export const Component = function ArtistPage(): JSX.Element {
     if (currentUser && artistId) {
       const artist = await fetchArtist(artistId);
       setArtistData(artist);
+      console.log(artist)
     }
   }
 

@@ -8,15 +8,15 @@ import {
   getAuth,
   signInAnonymously,
   signInWithPopup,
-} from "firebase/auth";
-import { atom, useAtomValue } from "jotai";
-import { loadable } from "jotai/utils";
-import { useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { fetchUserType } from "../services/user-service";
-import { UserType } from "../types/user-type";
-import { app, auth } from "./firebaseInit";
-import { store } from "./store";
+} from "firebase/auth"
+import {atom, useAtomValue} from "jotai"
+import {loadable} from "jotai/utils"
+import {useCallback, useState} from "react"
+import {useNavigate} from "react-router-dom"
+import {fetchUserType} from "../services/user-service"
+import {UserType} from "../types/user-type"
+import {app, auth} from "./firebaseInit"
+import {store} from "./store"
 
 export const currentUser = atom<Promise<User | null> | User | null>(
   new Promise<User | null>(() => {}),
@@ -30,10 +30,8 @@ currentUser.debugLabel = "currentUser";
 
 const unsubscribe = auth.onAuthStateChanged(async (user) => {
   store.set(currentUser, user);
-  console.log("currentUser", user);
   if (user) {
     const userType = await fetchUserType(user.uid);
-    console.log("userType", userType);
     store.set(currentUserType, userType);
   } else {
     store.set(currentUserType, null);

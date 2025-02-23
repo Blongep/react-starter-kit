@@ -1,11 +1,11 @@
-import CancelIcon from "@mui/icons-material/Cancel";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import { IconButton, Table, Typography } from "@mui/joy";
-import dayjs from "dayjs";
+import CancelIcon from "@mui/icons-material/Cancel"
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
+import {IconButton, Table, Typography} from "@mui/joy"
+import dayjs from "dayjs"
 //import { rejectOption, validateOption } from "../services/artist-service";
-import { cancelOption, validateOption } from "../services/artist-service";
-import { Availability } from "../types/availability";
-import { Option } from "../types/option";
+import {cancelOption, validateOption} from "../services/artist-service"
+import {Availability} from "../types/availability"
+import {Option} from "../types/option"
 
 export function OptionArtistGrid(optionsProps: OptionGridProps): JSX.Element {
   return (

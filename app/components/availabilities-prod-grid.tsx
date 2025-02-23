@@ -1,14 +1,14 @@
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import { IconButton, Stack, Table, Typography } from "@mui/joy";
-import dayjs, { Dayjs } from "dayjs";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
+import {IconButton, Stack, Table, Typography} from "@mui/joy"
+import dayjs, {Dayjs} from "dayjs"
 //import { rejectOption, validateOption } from "../services/artist-service";
-import { DatePicker } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import "dayjs/locale/fr";
-import { useEffect, useState } from "react";
-import { createOptionFromAvailability } from "../services/artist-service";
-import { Availability } from "../types/availability";
+import {DatePicker} from "@mui/x-date-pickers"
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs"
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider"
+import "dayjs/locale/fr"
+import {useEffect, useState} from "react"
+import {createOptionFromAvailability} from "../services/artist-service"
+import {Availability} from "../types/availability"
 
 export function AvailabilityProdGrid(
   availabilitiesProps: AvailabilityGridProps,
@@ -23,7 +23,7 @@ export function AvailabilityProdGrid(
   // const filter = (event: React.ChangeEvent<HTMLInputElement>) => {}
   // const sort = (value: keyof Data[0], order: string) => {}
   // const updateOrder = () => {}
-  
+
   useEffect(() => {
     availabilitiesProps.availabilities.forEach((availability: Availability) => {
       updateMap(availability.id, availability.startDate);
@@ -37,7 +37,7 @@ export function AvailabilityProdGrid(
         <thead>
           <tr>
             <th style={{ width: "20%" }}>Artiste</th>
-            <th style={{ width: "20%" }}>Région</th>
+            <th style={{ width: "20%" }}>Zones</th>
             <th style={{ width: "20%" }}>Date de début</th>
             <th style={{ width: "20%" }}>Date de fin</th>
             <th style={{ width: "20%" }}>Poser une option</th>
@@ -56,7 +56,7 @@ export function AvailabilityProdGrid(
                     {availability.zones.reduce(
                       (accumulator: string, currentValue: string) => currentValue + " " + accumulator,
                       "",)}
-                  </Typography>                  
+                  </Typography>
                   </td>
                   <td>
                     <Typography  color="primary">

@@ -1,6 +1,6 @@
-import { Artist } from "../types/artist";
+import {Artist} from "../types/artist"
 
-import { getApp } from "firebase/app";
+import {getApp} from "firebase/app"
 import {
   Timestamp,
   addDoc,
@@ -12,21 +12,23 @@ import {
   getFirestore,
   query,
   where,
-} from "firebase/firestore";
+} from "firebase/firestore"
 
-import dayjs from "dayjs";
-import { app } from "../core/firebaseInit";
-import { Availability } from "../types/availability";
-import { Concert } from "../types/concert";
-import { Option } from "../types/option";
-import { Venue } from "../types/venue";
+import dayjs from "dayjs"
+import {app} from "../core/firebaseInit"
+import {Availability} from "../types/availability"
+import {Concert} from "../types/concert"
+import {Option} from "../types/option"
+import {Venue} from "../types/venue"
 const db = getFirestore(app ? app : getApp());
 
 const convertFirestoreDateToDayjs = (firestoreDate: Timestamp): dayjs.Dayjs => {
   return dayjs(firestoreDate.toDate());
 };
 
-const midnightThisMorning = (new Date()).setHours(0,0,0,0);
+const today = new Date();
+today.setHours(0,0,0,0)
+const midnightThisMorning = Timestamp.fromDate(today);
 
 export const fetchSimpleAvailability = async (
   availabilityId: string,
@@ -77,7 +79,7 @@ export const fetchAvailabilitiesFromArtistId = async (
   artistId: string,
 ): Promise<Availability[]> => {
   const queryAvailabilities = await getDocs(
-    query(collection(db, "availabilities"), where("artistId", "==", artistId)),
+    query(collection(db, "availabilities"), where("artistId", "==", artistId), where("endDate", ">=", midnightThisMorning)),
   );
   const availabilities = await Promise.all(
     queryAvailabilities.docs.map(async (availability) => {
@@ -155,11 +157,6 @@ export const fetchOptionsFromAvailabilityId = async (
 
 export const fetchArtists = async (): Promise<Artist[]> => {
   const querySnapshot = await getDocs(collection(db, "artists"));
-  querySnapshot.forEach((doc) => {
-    console.log(
-      `${doc.id} => ${doc.data()},${doc.data().longName}, ${doc.data().shortName}}`,
-    );
-  });
   return querySnapshot.docs.map((artist) => {
     const data = artist.data();
     return {

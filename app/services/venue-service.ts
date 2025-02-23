@@ -1,4 +1,4 @@
-import { Venue } from "../types/venue";
+import {Venue} from "../types/venue"
 
 const venues: Venue[] = [
   {
@@ -46,7 +46,6 @@ const venues: Venue[] = [
 export const fetchVenues = (): Venue[] => {
   const data = localStorage.getItem("venues");
   if (data === null) {
-    console.log("empty");
     localStorage.setItem("venues", JSON.stringify(venues));
     return venues;
   }

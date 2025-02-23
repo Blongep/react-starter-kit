@@ -1,11 +1,11 @@
-import { Table, Typography } from "@mui/joy";
-import dayjs from "dayjs";
+import {Table, Typography} from "@mui/joy"
+import dayjs from "dayjs"
 //import { rejectOption, validateOption } from "../services/artist-service";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import "dayjs/locale/fr";
-import { Availability } from "../types/availability";
-import { Option } from "../types/option";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs"
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider"
+import "dayjs/locale/fr"
+import {Availability} from "../types/availability"
+import {Option} from "../types/option"
 
 export function OptionsProdGrid(
   availabilitiesProps: OptionGridProps,
