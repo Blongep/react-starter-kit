@@ -1,7 +1,7 @@
-import {Table, Typography} from "@mui/joy"
-import dayjs from "dayjs"
+import { Table, Typography } from "@mui/joy";
+import dayjs from "dayjs";
 //import { rejectOption, validateOption } from "../services/artist-service";
-import {Availability} from "../types/availability"
+import { Availability } from "../types/availability";
 
 export function AvailabilityArtistGrid(
   availabilitiesProps: AvailabilityGridProps,
@@ -22,9 +22,7 @@ export function AvailabilityArtistGrid(
               <tr key={availability.id}>
                 <td>
                   <Typography  color="primary">
-                    {availability.zones.reduce(
-                      (accumulator: string, currentValue: string) => currentValue + " " + accumulator,
-                      "",)}
+                    {availability.zones.join(', ')}
                   </Typography>
                 </td>
                 <td>

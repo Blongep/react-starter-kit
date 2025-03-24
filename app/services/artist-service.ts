@@ -1,6 +1,6 @@
-import {Artist} from "../types/artist"
+import { Artist } from "../types/artist"
 
-import {getApp} from "firebase/app"
+import { getApp } from "firebase/app"
 import {
   Timestamp,
   addDoc,
@@ -15,11 +15,11 @@ import {
 } from "firebase/firestore"
 
 import dayjs from "dayjs"
-import {app} from "../core/firebaseInit"
-import {Availability} from "../types/availability"
-import {Concert} from "../types/concert"
-import {Option} from "../types/option"
-import {Venue} from "../types/venue"
+import { app } from "../core/firebaseInit"
+import { Availability } from "../types/availability"
+import { Concert } from "../types/concert"
+import { Option } from "../types/option"
+import { Venue } from "../types/venue"
 const db = getFirestore(app ? app : getApp());
 
 const convertFirestoreDateToDayjs = (firestoreDate: Timestamp): dayjs.Dayjs => {
@@ -169,6 +169,28 @@ export const fetchArtists = async (): Promise<Artist[]> => {
     } as unknown as Artist;
   });
 };
+
+export const fetchArtistsFromString = async (searchString: string): Promise<Artist[]> => {
+  searchString=searchString.toLowerCase().replace(/\s/g, "");
+  const querySnapshot = await getDocs(
+    query(
+      collection(db, "artists"),
+      where('shortName', '>=', searchString),
+      where('shortName', '<=', searchString+ '\uf8ff')
+    ));
+  return querySnapshot.docs.map((artist) => {
+    const data = artist.data();
+    return {
+      id: artist.id,
+      longName: data.longName,
+      shortName: data.shortName,
+      description: data.description,
+      availabilities: [],
+      concerts: [],
+    } as unknown as Artist;
+  });
+};
+
 
 export const fetchArtist = async (artistId: string): Promise<Artist> => {
   const artist = await getDoc(doc(db, "artists", artistId));

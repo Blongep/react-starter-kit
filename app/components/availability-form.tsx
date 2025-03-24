@@ -1,39 +1,42 @@
-import {Button, FormControl, Stack} from "@mui/joy"
+import { Button, FormControl, Stack } from "@mui/joy"
 import Autocomplete from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
-import {DatePicker} from "@mui/x-date-pickers"
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs"
-import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider"
-import {Dayjs} from "dayjs"
+import { DatePicker } from "@mui/x-date-pickers"
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
+import { Dayjs } from "dayjs"
 import "dayjs/locale/fr"
-import {useEffect, useState} from "react"
-import {addAvailability} from "../services/artist-service"
-import {fetchRegionsDepartments} from "../services/ext-service"
-import {Availability} from "../types/availability"
+import { useEffect, useState } from "react"
+import { addAvailability } from "../services/artist-service"
+import { fetchRegionsDepartments } from "../services/ext-service"
+import { Availability } from "../types/availability"
 
 export function AvailabilityForm(
   availabilitiesFormProps: AvailabilitiesFormProps,
 ): JSX.Element {
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
-  const [zoneMap, setZoneMap] = useState(new Map<number,string>());
-  const [mapKeys, setMapKeys] = useState<number[]>([]);
-  const updateMap = (k: number, v: string) => {
-    setZoneMap(zoneMap.set(k, v));
-  };
+  const [zoneList, setZoneList] = useState<string[]>([""]);
 
-  const deleteFromMap = (keyToDelete: number) => {
-
-    let tempMap = new Map<number,string>();
-    let newKey = 0;
-    zoneMap.forEach((value: string, key: number) => {
-      if (key !== keyToDelete) {
-        tempMap.set(newKey, value);
-        newKey++;
+  const updateZoneList = (indexToChange: number, newValue: string) => {
+    setZoneList(zoneList.map((zone: string, index: number) => {
+      if (index === indexToChange) {
+        return newValue;
+      } else {
+        return zone;
       }
-    })
-    setZoneMap(tempMap);
-    setMapKeys(mapKeys.concat(0));
+    }))
+  };
+  const deleteFromZoneList = (indexToDelete: number) => {
+    const nextZones = zoneList.map((zone: string, index: number) => {
+      if (index === indexToDelete) {
+        return undefined;
+      } else {
+        return zone;
+      }
+    }).filter((zone: string | undefined) => zone !== undefined);
+    // Re-render with the new array
+    setZoneList(nextZones);
   };
 
   const [regionsDepartments, setRegionsDepartments] = useState<string[]>([]);
@@ -43,18 +46,15 @@ export function AvailabilityForm(
       setRegionsDepartments(await fetchRegionsDepartments());
     }
     fetchData();
-    updateMap(0, "");
+    setZoneList([""]);
   }, []);
 
   const addAutocomplete = () => {
-    const newKey = zoneMap.size;
-    setMapKeys(mapKeys.concat(newKey));
-    updateMap(newKey, "");
+    setZoneList([...zoneList, ""]);
   };
 
   const deleteAutocomplete = (key: number) => {
-    deleteFromMap(key)
-    setMapKeys(mapKeys.filter((number) => number===zoneMap.size));
+    deleteFromZoneList(key);
   };
 
   return (
@@ -68,14 +68,12 @@ export function AvailabilityForm(
             artistName: "",
             startDate: startDate as Dayjs,
             endDate: endDate as Dayjs,
-            zones:[ ...zoneMap.values() ] as string[],
+            zones: zoneList as string[],
             options: [],
           };
           await addAvailability(newAvailability);
           availabilitiesFormProps.updateState();
-          setZoneMap(new Map());
-          updateMap(0, "");
-          setMapKeys([0]);
+          setZoneList([""]);
           setStartDate(null);
           setEndDate(null);
         }}
@@ -98,23 +96,23 @@ export function AvailabilityForm(
               onChange={(newValue: Dayjs | null) => setEndDate(newValue)}
             />
           </FormControl>
-          {[...zoneMap.keys()].map((key: number) => (
-            <FormControl key={key} required>
+          {zoneList.map((zone: string,index: number) => (
+            <FormControl key={index} required>
               <Autocomplete
                 disablePortal
                 options={regionsDepartments}
                 onChange={(event: any, newValue: string | null) => {
-                  newValue ?  updateMap(key, newValue) : updateMap(key, "");
+                  newValue ?  updateZoneList(index, newValue) : updateZoneList(index, "");
                 }}
                 renderInput={(params: any) => <TextField {...params} label="Region ou département" />}
               />
-            {key !== 0 && <Button onClick={() => deleteAutocomplete(key)}>Supprimer la zone</Button>}
+            {index !== 0 && <Button onClick={() => deleteAutocomplete(index)}>Supprimer la zone</Button>}
             </FormControl>
           ))}
 
           <Button onClick={addAutocomplete}>Zone Supplémentaire</Button>
           <Button
-            disabled={startDate === null || endDate === null || startDate.isAfter(endDate)}
+            disabled={startDate === null || endDate === null || startDate.isAfter(endDate) || zoneList.includes("")}
             type="submit"
             sx={{ mt: 1 }}
           >

@@ -1,14 +1,14 @@
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
-import {IconButton, Stack, Table, Typography} from "@mui/joy"
-import dayjs, {Dayjs} from "dayjs"
+import { IconButton, Stack, Table, Typography } from "@mui/joy"
+import dayjs, { Dayjs } from "dayjs"
 //import { rejectOption, validateOption } from "../services/artist-service";
-import {DatePicker} from "@mui/x-date-pickers"
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs"
-import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider"
+import { DatePicker } from "@mui/x-date-pickers"
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import "dayjs/locale/fr"
-import {useEffect, useState} from "react"
-import {createOptionFromAvailability} from "../services/artist-service"
-import {Availability} from "../types/availability"
+import { useEffect, useState } from "react"
+import { createOptionFromAvailability } from "../services/artist-service"
+import { Availability } from "../types/availability"
 
 export function AvailabilityProdGrid(
   availabilitiesProps: AvailabilityGridProps,
@@ -53,9 +53,7 @@ export function AvailabilityProdGrid(
                   </td>
                   <td>
                   <Typography  color="primary">
-                    {availability.zones.reduce(
-                      (accumulator: string, currentValue: string) => currentValue + " " + accumulator,
-                      "",)}
+                  {availability.zones.join(', ')}
                   </Typography>
                   </td>
                   <td>
