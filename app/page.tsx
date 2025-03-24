@@ -1,13 +1,14 @@
 import Image from "next/image";
 import Header from "./component/Header";
+import Teststyled from "./component/Teststyled";
 
 export default function Home() {
   return (
     <div>
       <Header />
+      <Teststyled />
       <main>
         <Image
-          
           src="/next.svg"
           alt="Next.js logo"
           width={180}

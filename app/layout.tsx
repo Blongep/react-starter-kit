@@ -3,6 +3,7 @@ import StyledComponentsRegistry from './lib/registry'
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './lib/theme';
+import CssBaseline from '@mui/material/CssBaseline';
 
 
 export const metadata: Metadata = {
@@ -18,10 +19,11 @@ export default function RootLayout({
   return (
     <html>
       <body>
-      <ThemeProvider {...{theme}}>
-        <AppRouterCacheProvider>
-          <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
-        </AppRouterCacheProvider>
+        <CssBaseline />
+        <ThemeProvider {...{theme}}>
+          <AppRouterCacheProvider>
+            <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+          </AppRouterCacheProvider>
         </ThemeProvider>
       </body>
     </html>
