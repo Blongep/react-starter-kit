@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import StyledComponentsRegistry from './lib/registry'
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from './lib/theme';
 
 
 export const metadata: Metadata = {
@@ -16,7 +18,11 @@ export default function RootLayout({
   return (
     <html>
       <body>
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+      <ThemeProvider {...{theme}}>
+        <AppRouterCacheProvider>
+          <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        </AppRouterCacheProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
